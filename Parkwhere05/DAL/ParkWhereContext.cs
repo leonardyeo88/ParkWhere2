@@ -24,18 +24,20 @@ namespace Parkwhere05.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            throw new UnintentionalCodeFirstException();
+            //throw new UnintentionalCodeFirstException();
         }
 
 
-        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        //public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        //public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        //public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        //public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        //public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Bookmark> Bookmarks { get; set; }
         public virtual DbSet<Carpark> Carparks { get; set; }
         public virtual DbSet<ParkingHistory> ParkingHistories { get; set; }
         public virtual DbSet<PetrolStation> PetrolStations { get; set; }
+        public virtual DbSet<Weather> Weathers { get; set; }
+        public virtual DbSet<BookmarkReport> BookmarkReports { get; set; }
     }
 }

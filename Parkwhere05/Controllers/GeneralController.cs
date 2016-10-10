@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Parkwhere05.Services;
+using Parkwhere05.Models;
 
 namespace Parkwhere05.Controllers
 {
@@ -20,6 +21,8 @@ namespace Parkwhere05.Controllers
         internal IDataGateway<T> dataGateway;
         internal GeneralController()
         {
+            List<Weather> weatherList = new List<Weather>();
+
             if (HomeController.CurrentCorrList != null)
             {
                 string lat = "";
@@ -29,7 +32,12 @@ namespace Parkwhere05.Controllers
                     lat = item[0];
                     lng = item[1];
                 }
-                currentForecast = weatherGateway.GetCurrentWeather(getMyAddressGateway.GetMyAreaName(lat, lng));
+
+                weatherGateway.DeleteWeatherDataFromDB();
+                weatherGateway.GetWeatherAndUpdateDB();
+                weatherList = weatherGateway.GetWeatherFromDB();
+
+                currentForecast = weatherGateway.GetCurrentWeather(weatherList, getMyAddressGateway.GetMyAreaName(lat, lng));
                 ViewBag.Weather = currentForecast;
             }
             else

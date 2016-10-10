@@ -23,7 +23,7 @@ namespace Parkwhere05.Controllers
         public ActionResult Create(int carparkId, String address)
         {
             Bookmark bookmark = new Bookmark();
-            bookmark.username = User.Identity.Name;
+            //bookmark.username = User.Identity.Name;
             bookmark.date = DateTime.Now;
             bookmark.carparkId = carparkId;
             ViewBag.address = address;
@@ -124,7 +124,7 @@ namespace Parkwhere05.Controllers
             else
             {
                 var userBookmark = from j in dataGateway.SelectAll() select j;
-                userBookmark = userBookmark.Where(Bookmark => Bookmark.username == User.Identity.Name);
+                //userBookmark = userBookmark.Where(Bookmark => Bookmark.username == User.Identity.Name);
                 return View(userBookmark);
             }
         }

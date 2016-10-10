@@ -1,11 +1,13 @@
 ﻿using Parkwhere05.Models;
 using System.Data.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Parkwhere05.DAL
 {
     public class BookmarkGateway : DataGateway<Bookmark>
     {
-
         public BookmarkGateway()
         {
             this.data = db.Set<Bookmark>();
@@ -28,6 +30,7 @@ namespace Parkwhere05.DAL
         {
             db.SaveChanges();
         }
+        
 
         public void Update(Bookmark obj)
         {

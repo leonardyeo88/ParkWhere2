@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Parkwhere05.Services;
+using Parkwhere05.Models;
 
 namespace Parkwhere05.Controllers
 {
@@ -13,6 +14,13 @@ namespace Parkwhere05.Controllers
 
         public HomeController()
         {
+            
+        }
+
+        public ActionResult Index()
+        {
+            List<Weather> weatherList = new List<Weather>();
+
             if (CurrentCorrList != null)
             {
                 string lat = "";
@@ -22,22 +30,25 @@ namespace Parkwhere05.Controllers
                     lat = item[0];
                     lng = item[1];
                 }
-                currentForecast = weatherGateway.GetCurrentWeather(getMyAreaGateway.GetMyAreaName(lat, lng));
+
+                weatherGateway.DeleteWeatherDataFromDB();
+                weatherGateway.GetWeatherAndUpdateDB();
+                weatherList = weatherGateway.GetWeatherFromDB();
+
+                currentForecast = weatherGateway.GetCurrentWeather(weatherList, getMyAreaGateway.GetMyAreaName(lat, lng));
                 ViewBag.Weather = currentForecast;
             }
             else
             {
                 ViewBag.Weather = "Retriving weather in progress...";
             }
-        }
 
-        public ActionResult Index()
-        {
             return View();
         }
 
         public ActionResult About()
         {
+            
             return View();
         }
 

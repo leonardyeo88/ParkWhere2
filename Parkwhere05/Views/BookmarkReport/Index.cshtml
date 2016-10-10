@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Parkwhere05.Models.BookmarkReport>
+@{
+    ViewBag.Title = "Bookmark Reports";
+}
+@{
+    System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+}
+
+@Styles.Render("~/Content/css")
+
+<div class="well" id="wellHomePage">
+    <h2>Bookmark Reports Group By User</h2>
+
+    @*<script type="text/javascript" src="~/Scripts/jquery-2.1.4.js"></script>
+        <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.js"></script>*@
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpLBynr5qXRQgPXptGsKV3GPEYThsN5JI&sensor=false"></script>
+    <script src="~/Scripts/svy21.js" type="text/javascript"></script>
+
+    @section scripts {
+
+    <section class="scripts">
+        <script type="text/javascript">
+        var map = new google.maps.Map(document.getElementById('map_canvas'), {
+            zoom: 11,
+            center: new google.maps.LatLng(1.3485232,103.8208814),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        /*Bubble sort*/
+        function doBubbleSort(locations){
+            
+            var unsortedLocationObj_Temp;
+
+            for (var i = 0; i < locations.length; i++)
+            {
+                for (var sort = 0; sort < locations.length - 1; sort++)
+                {
+                    if (locations[sort].UserCount > locations[sort + 1].UserCount)
+                    {
+                        unsortedLocationObj_Temp = locations[sort + 1];
+                        locations[sort + 1] = locations[sort];
+                        locations[sort] = unsortedLocationObj_Temp;
+                    }
+                }
+            }
+            return locations
+        }
+
+        var infowindow = new google.maps.InfoWindow();
+        var marker, i;
+
+        var locations = @Html.Raw(serializer.Serialize(ViewBag.UnsortedBookmarkReportList));
+            console.log(locations);
+
+            if(locations!=null)
+            {
+                console.time("bubble sort of locations");
+                var locations = doBubbleSort(locations)
+                console.timeEnd("bubble sort of locations");
+
+                for (i = 0; i < locations.length; i++) {
+
+                    // Initialization
+                    var cv = new SVY21();
+
+                    var resultLatLon = cv.computeLatLon(locations[i].x_coord, locations[i].y_coord);
+
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(resultLatLon.lat, resultLatLon.lon),
+                        map: map
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent("Carpark Address :<br />" + locations[i]);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            }
+        </script>
+    </section>
+    }
+
+    <div>
+        <div id="map_canvas" style="height: 450px;"></div>
+    </div>
+
+    @*@Ajax.BeginForm("ShowSearchResults", "BookmarkReport",
+         new AjaxOptions
+         {
+             HttpMethod = "POST",
+             UpdateTargetId = "showBookReports",
+             InsertionMode = InsertionMode.Replace
+         })
+        <h4>
+            Carpark No: @Html.TextBox("carparkNo")
+            <input type="submit" value="Search" />
+        </h4>
+        @{Html.EndForm();}*@
+
+    <div id="showBookReports">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.carparkNo)
+                </th>
+            </tr>
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.carparkNo)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+
+</div>
