@@ -17,5 +17,6 @@ namespace Parkwhere05.Models
         public decimal x_coord { get; set; }
         public decimal y_coord { get; set; }
         public int UserCount { get; set; }
+        public string User_email { get; set; } //for assignment 2
     }
 }

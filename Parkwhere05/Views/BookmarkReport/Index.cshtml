@@ -37,7 +37,7 @@
             {
                 for (var sort = 0; sort < locations.length - 1; sort++)
                 {
-                    if (locations[sort].UserCount > locations[sort + 1].UserCount)
+                    if (locations[sort].UserCount < locations[sort + 1].UserCount) //big to small
                     {
                         unsortedLocationObj_Temp = locations[sort + 1];
                         locations[sort + 1] = locations[sort];
@@ -56,9 +56,9 @@
 
             if(locations!=null)
             {
-                console.time("bubble sort of locations");
+                //console.time("bubble sort of locations");
                 var locations = doBubbleSort(locations)
-                console.timeEnd("bubble sort of locations");
+                //console.timeEnd("bubble sort of locations");
 
                 for (i = 0; i < locations.length; i++) {
 
@@ -74,7 +74,7 @@
 
                     google.maps.event.addListener(marker, 'click', (function(marker, i) {
                         return function() {
-                            infowindow.setContent("Carpark Address :<br />" + locations[i]);
+                            infowindow.setContent("Carpark Address :<br />" + locations[i].address +"<br/> Frequency: "+locations[i].UserCount +"<br/> User Email: "+locations[i].User_email);
                             infowindow.open(map, marker);
                         }
                     })(marker, i));
@@ -101,7 +101,7 @@
         </h4>
         @{Html.EndForm();}*@
 
-    <div id="showBookReports">
+    @*<div id="showBookReports">
         <table class="table">
             <tr>
                 <th>
@@ -131,7 +131,7 @@
                 </tr>
             }
         </table>
-    </div>
+    </div>*@
 
 
 </div>

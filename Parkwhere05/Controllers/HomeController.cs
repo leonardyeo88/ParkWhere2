@@ -17,6 +17,37 @@ namespace Parkwhere05.Controllers
             
         }
 
+        [HttpPost]
+        public ActionResult Index(string lat, string lng)
+        {
+            List<Weather> weatherList = new List<Weather>();
+
+            //if (CurrentCorrList != null)
+            //{
+            //    //string lat = "";
+            //    //string lng = "";
+            //    foreach (var item in CurrentCorrList)
+            //    {
+            //        lat = item[0];
+            //        lng = item[1];
+            //    }
+
+            weatherGateway.DeleteWeatherDataFromDB();
+            weatherGateway.GetWeatherAndUpdateDB();
+            weatherList = weatherGateway.GetWeatherFromDB();
+
+            currentForecast = weatherGateway.GetCurrentWeather(weatherList, getMyAreaGateway.GetMyAreaName(lat, lng));
+            ViewBag.Weather = currentForecast;
+            //}
+            //else
+            //{
+            //    ViewBag.Weather = "Retriving weather in progress...";
+            //}
+
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult Index()
         {
             List<Weather> weatherList = new List<Weather>();
@@ -45,7 +76,7 @@ namespace Parkwhere05.Controllers
 
             return View();
         }
-
+        
         public ActionResult About()
         {
             

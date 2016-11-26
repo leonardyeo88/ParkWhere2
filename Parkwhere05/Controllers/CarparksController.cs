@@ -19,23 +19,24 @@ namespace Parkwhere05.Controllers
         [HttpPost]
         public ActionResult Index(string value1, string value2)
         {
-            if (Session["searchResult"] == null)
-            {
+            //if (Session["searchResult"] == null)
+            //{
                 ViewBag.List = ((CarparkGateway)dataGateway).FilterByType(value1, value2);
                 return View(TopFiveCarparks);
-            }
-            else {
-                string searchResult = Session["searchResult"].ToString();
-                ViewBag.List = ((CarparkGateway)dataGateway).FilterAddressByType(searchResult, value1, value2);
-                return View(TopFiveCarparks);
-            }
+            //}
+            //else {
+            //    string searchResult = Session["searchResult"].ToString();
+            //    ViewBag.List = ((CarparkGateway)dataGateway).FilterAddressByType(searchResult, value1, value2);
+            //    return View(TopFiveCarparks);
+            //}
         }
 
         [HttpGet]
         public ActionResult Index(string addResults)
         {
-            Session["searchResult"] = addResults;
-            ViewBag.List = ((CarparkGateway)dataGateway).searchCarpark(addResults);
+            //Session["searchResult"] = addResults;
+            //ViewBag.List = ((CarparkGateway)dataGateway).searchCarpark(addResults);
+            TopFiveCarparks = ((CarparkGateway)dataGateway).GetTopFiveBookmarks();
             return View(TopFiveCarparks);
         }
 
