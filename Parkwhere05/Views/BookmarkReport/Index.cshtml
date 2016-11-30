@@ -48,17 +48,90 @@
             return locations
         }
 
+        /*Merge Sort*/
+        function doMergeSort(locations){
+
+            //Exit sort if length of item is less than 2
+            if (locations.length < 2){
+                return locations;
+            }
+
+            //Getting the middle value and split into left & right
+            var middle = Math.floor(locations.length / 2),
+                left = locations.slice(0, middle),
+                right = locations.slice(middle);
+
+            //Recursive doMergeSort of sorting left half and right half
+            return merge(doMergeSort(left), doMergeSort(right));
+        }
+
+        function merge(left, right){
+
+            //Variable to keep track of left/right index
+            var result = [], lIndex = 0, rIndex = 0;
+
+            //Compare and add corresponding results
+            while (lIndex < left.length && rIndex < right.length){
+                if (left[lIndex] > right[rIndex]){
+                    result.push(left[lIndex++]);
+                } else {
+                    result.push(right[rIndex++]);
+                }
+            }
+
+            return result.concat(left.slice(lIndex)).concat(right.slice(rIndex));
+        }
+
+        /*Quick Sort*/
+        function doQuickSort(locations){
+
+            //Terminates if location is empty
+            if (locations.length === 0){
+                return [];
+            }
+
+            var left = [], 
+                right = [], 
+                pivot = locations[0];
+
+            //Iterate throuh each element
+            for (var i = 1; i < locations.length; i++){
+
+                if (locations[i].UserCount > pivot.UserCount) {
+                    left.push(locations[i]);
+                } else {
+                    right.push(locations[i]);
+                }
+            }
+
+            //Recursive repeat until all sorted
+            return doQuickSort(left).concat(pivot, doQuickSort(right));
+        }
+
         var infowindow = new google.maps.InfoWindow();
         var marker, i;
 
         var locations = @Html.Raw(serializer.Serialize(ViewBag.UnsortedBookmarkReportList));
-            console.log(locations);
+            //console.log(locations);
 
             if(locations!=null)
             {
+                // In this section, need to get the response time performance
+                // result in JMeter for all three types of sort algorithm
+
                 //console.time("bubble sort of locations");
                 var locations = doBubbleSort(locations)
                 //console.timeEnd("bubble sort of locations");
+
+                //console.time("Merge sort of locations");
+                //var locations = doMergeSort(locations);
+                //console.timeEnd("Merge sort of locations");
+
+                //console.time("Quicksort of locations");
+                //var locations = doQuickSort(locations)
+                //console.timeEnd("Quicksort of locations");
+
+                console.log(locations);
 
                 for (i = 0; i < locations.length; i++) {
 

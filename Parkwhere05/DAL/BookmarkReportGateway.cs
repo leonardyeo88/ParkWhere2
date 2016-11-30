@@ -25,7 +25,9 @@ namespace Parkwhere05.DAL
             //BookmarkReportsList = data.SqlQuery("SELECT COUNT(B.User_UserId) as UserCount, B.date, C.carparkNo, C.address, B.BookmarkId, B.carparkId, C.x_coord, C.y_coord  FROM carpark C, bookmark B WHERE C.id = B.carparkId GROUP BY B.date ORDER BY COUNT(*)").ToList();
 
             /*for assignment 2 - unoptimised*/
-            BookmarkReportsList = data.SqlQuery("SELECT User_email, COUNT(B.User_UserId) as UserCount, B.date, C.carparkNo, C.address, B.BookmarkId, B.carparkId, C.x_coord, C.y_coord  FROM parkwhere.carpark C, parkwhere.bookmark B, parkwhere.user U WHERE C.id = B.carparkId AND B.User_UserId = U.UserId GROUP BY B.date").ToList();
+            BookmarkReportsList = data.SqlQuery("SELECT straight_join user.User_email, bookmark.date, carpark.carparkNo, carpark.address, bookmark.BookmarkId, bookmark.carparkId, carpark.x_coord, carpark.y_coord, COUNT(bookmark.User_UserId) as UserCount FROM parkwhere.user JOIN parkwhere.bookmark ON bookmark.User_UserId = user.UserId JOIN parkwhere.carpark ON carpark.id = bookmark.carparkId GROUP BY bookmark.date ORDER BY COUNT(*)").ToList();
+
+            //BookmarkReportsList = data.SqlQuery("SELECT * FROM parkwhere.user U,(SELECT *,B.User_UserId as UserId, COUNT(B.User_UserId) AS UserCount FROM parkwhere.carpark C, parkwhere.bookmark B WHERE C.id = B.carparkId GROUP BY B.date ORDER BY COUNT(*)) as query2 WHERE U.userId = query2.User_UserId").ToList();
 
             /*for assignment 2 - optimised*/
             //BookmarkReportsList = data.SqlQuery("SELECT U.User_email, query2.UserId, query2.UserCount, query2.date, query2.carparkNo, query2.address, query2.BookmarkId, query2.carparkId, query2.x_coord, query2.y_coord FROM parkwhere.user U, (SELECT B.User_UserId as UserId, COUNT(B.User_UserId) as UserCount, B.date as date, C.carparkNo as carparkNo, C.address as address, B.BookmarkId as BookmarkId, B.carparkId as carparkId, C.x_coord as x_coord, C.y_coord as y_coord FROM parkwhere.carpark C, parkwhere.bookmark B WHERE C.id = B.carparkId GROUP BY B.date ORDER BY COUNT(*)) as query2 WHERE U.userId = query2.UserId").ToList();
